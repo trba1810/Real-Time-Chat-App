@@ -4,9 +4,11 @@ import "./App.css";
 import WaitingRoom from "./components/waitingroom";
 import { useState } from "react";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import ChatRoom from "./components/ChatRoom";
 
 function App() {
   const [connection, setConnection] = useState();
+  const [messages, setMessages] = useState([]);
 
   const joinChatRoom = async (username, chatroom) => {
     try {
@@ -18,6 +20,11 @@ function App() {
       connection.on("JoinSpecificChatRoom", (username, msg) => {
         console.log("msg :", msg);
       });
+
+      connection.on("JoinSpecificChatRoom", (username, msg) => {
+        setMessages((messages) => [...messages, { username, msg }]);
+      });
+
       await connection.start();
       await connection.invoke("JoinSpecificChatRoom", { username, chatroom });
       setConnection(connection);
@@ -35,7 +42,11 @@ function App() {
               <h1 className="font-weight-light">Welcome to Chat App</h1>
             </Col>
           </Row>
-          <WaitingRoom joinChatRoom={joinChatRoom} />
+          {!connection ? (
+            <WaitingRoom joinChatRoom={joinChatRoom} />
+          ) : (
+            <ChatRoom messages={messages} />
+          )}
         </Container>
       </main>
     </div>
