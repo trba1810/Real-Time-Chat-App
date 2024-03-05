@@ -23,10 +23,12 @@ namespace ChatApp.Hubs
             await Clients.Group(conn.ChatRoom).SendAsync("JoinSpecificChatRoom", "admin", $"{conn.Username} has joined {conn.ChatRoom}");
         }
 
+        
+
         public async Task SendMessage(string msg)
         {
-            if(_shared.connections.TryGetValue(Context.ConnectionId,out UserConnection conn))
-            {
+            if (_shared.connections.TryGetValue(Context.ConnectionId, out UserConnection conn))
+            {           
                 await Clients.Group(conn.ChatRoom).SendAsync("ReceiveSpecificMessage", conn.Username, msg);
             }
         }

@@ -18,16 +18,24 @@ function App() {
         .build();
 
       connection.on("JoinSpecificChatRoom", (username, msg) => {
-        console.log("msg :", msg);
+        setMessages((messages) => [...messages, { username, msg }]);
       });
 
-      connection.on("JoinSpecificChatRoom", (username, msg) => {
-        setMessages((messages) => [...messages, { username, msg }]);
+      connection.on("ReceiveSpecificMessage", (username, message) => {
+        setMessages((messages) => [...messages, { username, message }]);
       });
 
       await connection.start();
       await connection.invoke("JoinSpecificChatRoom", { username, chatroom });
       setConnection(connection);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const sendMessage = async (message) => {
+    try {
+      await connection.invoke("SendMessage", message);
     } catch (error) {
       console.log(error);
     }
@@ -45,7 +53,7 @@ function App() {
           {!connection ? (
             <WaitingRoom joinChatRoom={joinChatRoom} />
           ) : (
-            <ChatRoom messages={messages} />
+            <ChatRoom messages={messages} sendMessage={sendMessage} />
           )}
         </Container>
       </main>

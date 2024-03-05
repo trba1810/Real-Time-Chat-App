@@ -1,15 +1,39 @@
+import Table from "react-bootstrap/Table";
+
+// const MessageContainer = ({ messages }) => {
+//   return (
+//     <div>
+//       {messages.map((message, index) => (
+//         <Table striped bordered key={index}>
+//           <tbody>
+//             <tr>
+//               <td>{message.msg}</td>
+//             </tr>
+//           </tbody>
+//         </Table>
+//       ))}
+//     </div>
+//   );
+// };
+
+// export default MessageContainer;
+
 const MessageContainer = ({ messages }) => {
   return (
     <div>
-      {messages.map((msg, index) => (
-        <table stripped bordered>
-          <tr key={index}>
-            <td>
-              {msg.msg} - {msg.username}
-            </td>
-          </tr>
-        </table>
-      ))}
+      {messages.map((message, index) => {
+        return (
+          <Table striped bordered key={index}>
+            <tbody>
+              <tr>
+                <td>
+                  {message.message} - {message.username}
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        );
+      })}
     </div>
   );
 };
